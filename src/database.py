@@ -1,5 +1,6 @@
 import sqlite3
 from .models import NewsItem
+from datetime import datetime
 
 
 class Database:
@@ -52,3 +53,28 @@ class Database:
         except sqlite3.Error as e:
             print(f"Database error: {e}")
             return False
+
+    def get_items_without_body(self) -> list[NewsItem]:
+        """Get all news items that don't have body content."""
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                conn.row_factory = sqlite3.Row
+                cursor = conn.execute(
+                    """
+                    select link, title, timestamp, body 
+                    from news_items 
+                    where body is null
+                    """
+                )
+                return [
+                    NewsItem(
+                        title=row["title"],
+                        link=row["link"],
+                        timestamp=datetime.fromisoformat(row["timestamp"]),
+                        body=row["body"],
+                    )
+                    for row in cursor.fetchall()
+                ]
+        except sqlite3.Error as e:
+            print(f"Database error: {e}")
+            return []

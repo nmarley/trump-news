@@ -25,3 +25,17 @@ class Parser:
                 continue
 
         return items
+
+    @staticmethod
+    def parse_article_content(html: str) -> str | None:
+        """Parse the article content from the HTML."""
+        try:
+            soup = BeautifulSoup(html, "html.parser")
+            # Find the div holding the main content by matching a partial class name
+            content = soup.find("div", class_=lambda v: v and "entry-content" in v)
+            if content:
+                return content.get_text("\n", strip=True)
+            return None
+        except Exception as e:
+            print(f"Error parsing article content: {e}")
+            return None
