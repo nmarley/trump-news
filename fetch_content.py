@@ -15,9 +15,20 @@ def main():
     parser = Parser()
     content_fetcher = ContentFetcher(db, fetcher, parser)
 
+    # Get items that need content
+    items_missing_content = db.get_items_without_body()
+    total_missing = len(items_missing_content)
+
+    if total_missing == 0:
+        print("No articles missing content")
+        return
+
+    print(f"Found {total_missing} articles missing content")
+
     # Fetch missing content
-    updated = content_fetcher.fetch_missing_content(60, 90)
-    print(f"Updated content for {updated} articles")
+    updated = content_fetcher.fetch_missing_content(items_missing_content, 60, 90)
+    print(f"\nUpdated content for {updated} articles")
+    print(f"Articles still missing content: {total_missing - updated}")
 
 
 if __name__ == "__main__":

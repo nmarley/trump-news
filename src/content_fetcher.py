@@ -4,6 +4,7 @@ from typing import Optional
 from .fetcher import Fetcher
 from .parser import Parser
 from .database import Database
+from .models import NewsItem
 
 
 class ContentFetcher:
@@ -64,17 +65,17 @@ class ContentFetcher:
         return new_items, found_existing
 
     def fetch_missing_content(
-        self, min_delay: float = 30.0, max_delay: float = 60.0
+        self, items: list[NewsItem], min_delay: float = 30.0, max_delay: float = 60.0
     ) -> int:
         """
-        Fetch content for all items without body text.
+        Fetch content for the provided items without body text.
         Returns the number of items updated.
 
         Args:
+            items: List of NewsItems that need content fetched
             min_delay: Minimum time to wait between requests (in seconds)
             max_delay: Maximum time to wait between requests (in seconds)
         """
-        items = self.db.get_items_without_body()
         updated = 0
 
         for item in items:
