@@ -77,18 +77,20 @@ class ContentFetcher:
             max_delay: Maximum time to wait between requests (in seconds)
         """
         updated = 0
+        total_items = len(items)
 
-        for item in items:
+        for i, item in enumerate(items, 1):
             content = self._fetch_and_parse_content(item.link)
             if content:
                 if self.db.update_body(item.link, content):
                     updated += 1
                     print(f"Updated content for: {item.title}")
 
-            # Random delay between requests
-            delay = random.uniform(min_delay, max_delay)
-            print(f"Waiting {delay:.1f} seconds before next request...")
-            time.sleep(delay)
+            # Skip delay if this was the last item
+            if i < total_items:
+                delay = random.uniform(min_delay, max_delay)
+                print(f"Waiting {delay:.1f} seconds before next request...")
+                time.sleep(delay)
 
         return updated
 
