@@ -61,9 +61,10 @@ class Database:
                 conn.row_factory = sqlite3.Row
                 cursor = conn.execute(
                     """
-                    select link, title, timestamp, body 
-                    from news_items 
+                    select link, title, timestamp, body
+                    from news_items
                     where body is null
+                    order by timestamp asc
                     """
                 )
                 return [

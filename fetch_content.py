@@ -12,7 +12,7 @@ def main():
     content_fetcher = ContentFetcher(db, fetcher, parser)
 
     # Fetch missing content
-    updated = content_fetcher.fetch_missing_content()
+    updated = content_fetcher.fetch_missing_content(60, 90)
     print(f"Updated content for {updated} articles")
 
 

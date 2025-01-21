@@ -1,4 +1,5 @@
 import time
+import random
 from typing import Optional
 from .fetcher import Fetcher
 from .parser import Parser
@@ -11,13 +12,16 @@ class ContentFetcher:
         self.fetcher = fetcher
         self.parser = parser
 
-    def fetch_missing_content(self, delay: float = 1.0) -> int:
+    def fetch_missing_content(
+        self, min_delay: float = 30.0, max_delay: float = 60.0
+    ) -> int:
         """
         Fetch content for all items without body text.
         Returns the number of items updated.
 
         Args:
-            delay: Time to wait between requests (in seconds)
+            min_delay: Minimum time to wait between requests (in seconds)
+            max_delay: Maximum time to wait between requests (in seconds)
         """
         items = self.db.get_items_without_body()
         updated = 0
@@ -29,7 +33,9 @@ class ContentFetcher:
                     updated += 1
                     print(f"Updated content for: {item.title}")
 
-            # Be nice to the server
+            # Random delay between requests
+            delay = random.uniform(min_delay, max_delay)
+            print(f"Waiting {delay:.1f} seconds before next request...")
             time.sleep(delay)
 
         return updated
