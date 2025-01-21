@@ -39,19 +39,16 @@ All checks passed!
 
 ## Usage
 
-The project consists of two main scripts:
-
-1. Fetch news items (metadata):
+Run the script to fetch news and content:
 
 ```bash
-./.venv/bin/fetch_list.py
+./.venv/bin/python main.py
 ```
 
-2. Fetch full article content:
-
-```bash
-./.venv/bin/fetch_content.py
-```
+The script will:
+1. Fetch the list of new article metadata
+2. Download full content for any new articles
+3. Use reasonable delays between requests to avoid rate limiting
 
 The data is stored in `news.db` (SQLite database).
 

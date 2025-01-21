@@ -123,3 +123,10 @@ class Database:
         except sqlite3.Error as e:
             print(f"Database error: {e}")
             return []
+
+    def item_exists(self, link: str) -> bool:
+        """Check if an item with the given link already exists."""
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute("select 1 from news_items where link = ?", (link,))
+            return cursor.fetchone() is not None
