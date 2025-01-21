@@ -74,7 +74,7 @@ class Database:
                     (item.link, item.title, item.timestamp, item.body),
                 )
                 if row := cursor.fetchone():
-                    item.id = row[0]  # Set the ID on the item
+                    item.id = row[0]
                 return cursor.rowcount > 0
         except sqlite3.Error as e:
             print(f"Database error: {e}")
@@ -130,3 +130,29 @@ class Database:
             cursor = conn.cursor()
             cursor.execute("select 1 from news_items where link = ?", (link,))
             return cursor.fetchone() is not None
+
+    def get_item_by_link(self, link: str) -> NewsItem | None:
+        """Get a news item by its link."""
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                conn.row_factory = sqlite3.Row
+                cursor = conn.execute(
+                    """
+                    select id, link, title, timestamp, body
+                    from news_items
+                    where link = ?
+                    """,
+                    (link,),
+                )
+                if row := cursor.fetchone():
+                    return NewsItem(
+                        id=row["id"],
+                        title=row["title"],
+                        link=row["link"],
+                        timestamp=datetime.fromisoformat(row["timestamp"]),
+                        body=row["body"],
+                    )
+                return None
+        except sqlite3.Error as e:
+            print(f"Database error: {e}")
+            return None

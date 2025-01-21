@@ -3,13 +3,13 @@ import random
 from typing import Optional
 from .fetcher import Fetcher
 from .parser import Parser
-from .database import Database
 from .models import NewsItem
+from .repository import NewsRepository
 
 
 class ContentFetcher:
-    def __init__(self, db: Database, fetcher: Fetcher, parser: Parser):
-        self.db = db
+    def __init__(self, repository: NewsRepository, fetcher: Fetcher, parser: Parser):
+        self.repository = repository
         self.fetcher = fetcher
         self.parser = parser
 
@@ -56,10 +56,10 @@ class ContentFetcher:
         new_items = 0
         found_existing = False
         for item in news_items:
-            if self.db.item_exists(item.link):
+            if self.repository.item_exists(item.link):
                 found_existing = True
                 continue
-            if self.db.add_news_item(item):
+            if self.repository.add_item(item):
                 new_items += 1
 
         return new_items, found_existing
@@ -82,7 +82,7 @@ class ContentFetcher:
         for i, item in enumerate(items, 1):
             content = self._fetch_and_parse_content(item.link)
             if content:
-                if self.db.update_body(item.link, content):
+                if self.repository.update_content(item.link, content):
                     updated += 1
                     print(f"Updated content for: {item.title}")
 
