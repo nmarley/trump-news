@@ -3,6 +3,10 @@ from src.parser import Parser
 from src.database import Database
 from src.content_fetcher import ContentFetcher
 
+"""
+This script fetches the full text content for news items that are missing it in the database.
+"""
+
 
 def main():
     # Initialize components

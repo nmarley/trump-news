@@ -2,6 +2,14 @@ from src.fetcher import Fetcher
 from src.parser import Parser
 from src.database import Database
 
+"""
+This script fetches the main news page from the White House website, parses the
+news items, and stores them in a database.
+
+Another script will be used to fetch, parse and store the full text of each
+news item.
+"""
+
 
 def main():
     # Initialize components
