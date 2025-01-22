@@ -20,18 +20,17 @@ class ContentFetcher:
         """
         total_new_items = 0
 
-        print("Fetching news articles...")
         for page in range(1, max_pages + 1):
             new_items, found_existing = self._fetch_news_page(page)
             total_new_items += new_items
-            print(f"Page {page}: Added {new_items} new items")
+            # print(f"Added {new_items} new items")
 
             if found_existing and new_items == 0:
-                print("Found existing content, no new items to add")
+                # print("Found existing content, no new items to add")
                 break
 
             if new_items == 0 and not found_existing:
-                print("No more items found")
+                # print("No more items found")
                 break
 
         return total_new_items

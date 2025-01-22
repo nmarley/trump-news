@@ -36,7 +36,7 @@ def main():
     content_fetcher = ContentFetcher(repository, fetcher, parser)
 
     # 1. Fetch new articles
-    print("\nStep 1: Fetching news articles...")
+    print("\nFetching news articles...")
     total_new_items = content_fetcher.fetch_news_items()
     print(f"\nTotal new items added: {total_new_items}")
 
@@ -49,11 +49,10 @@ def main():
         return
 
     # 3. Fetch content for articles
-    print(f"\nStep 2: Found {total_missing} articles missing content")
-    print("Fetching full content for articles...")
+    print(f"\nFound {total_missing} article(s) missing content, fetching...")
 
     updated = content_fetcher.fetch_missing_content(items_missing_content, 30, 60)
-    print(f"\nUpdated content for {updated} articles")
+    print(f"\nUpdated content for {updated} article(s)")
     print(f"Articles still missing content: {total_missing - updated}")
 
 
