@@ -27,6 +27,13 @@ python3 -mvenv ./.venv
 ./.venv/bin/pip install -r requirements.txt
 ```
 
+## Test
+
+```bash
+# Run tests
+./.venv/bin/pytest
+```
+
 ## Format / Lint Check
 
 ```bash
