@@ -13,11 +13,17 @@ class Parser:
 
         for li in soup.find_all("li", class_="wp-block-post"):
             try:
-                a = li.find("h2").find("a")
+                h2 = li.find("h2", class_="wp-block-post-title")
+                if not h2:
+                    continue
+
+                a = h2.find("a")
                 title = a.text.strip()
                 link = a["href"]
-                timestamp = li.find("time")["datetime"]
-                timestamp = datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
+                timestamp = li.find("div", class_="wp-block-post-date").find("time")[
+                    "datetime"
+                ]
+                timestamp = datetime.fromisoformat(timestamp)
 
                 items.append(NewsItem(title=title, link=link, timestamp=timestamp))
             except (AttributeError, KeyError) as e:
@@ -31,7 +37,6 @@ class Parser:
         """Parse the article content from the HTML."""
         try:
             soup = BeautifulSoup(html, "html.parser")
-            # Find the div holding the main content by matching a partial class name
             content = soup.find("div", class_=lambda v: v and "entry-content" in v)
             if content:
                 return content.get_text("\n", strip=True)
